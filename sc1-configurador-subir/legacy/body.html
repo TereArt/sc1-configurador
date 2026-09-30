@@ -1,0 +1,144 @@
+<div class="app" id="app">
+  <header class="top">
+    <div class="brand">
+      <span class="brand-mark">SC1</span>
+      <span class="brand-sub">Score One · Jersey Lab</span>
+    </div>
+    <div class="top-meta" id="topMeta">Diseña tu jersey y míralo en 3D antes de comprar</div>
+  </header>
+
+  <section class="stage" id="stage" aria-label="Vista 3D del jersey">
+    <div class="stage-bg" aria-hidden="true"><span id="watermark">SHADY</span></div>
+    <canvas id="gl" aria-label="Jersey en 3D. Arrastra para girar."></canvas>
+    <div class="stage-hud">
+      <div class="view-btns" role="group" aria-label="Vista">
+        <button type="button" id="vFront" class="chip is-on">Frente</button>
+        <button type="button" id="vBack" class="chip">Espalda</button>
+        <button type="button" id="vSpin" class="chip" aria-pressed="false">Girar</button>
+      </div>
+      <p class="hint">Arrastra para girar · rueda o pellizca para acercar</p>
+    </div>
+    <div class="stage-tag" id="stageTag">Neon Rush · Hombre</div>
+  </section>
+
+  <aside class="panel" aria-label="Opciones de personalización">
+    <nav class="steps" role="tablist" aria-label="Pasos">
+      <button type="button" role="tab" class="step is-on" data-step="0"><b>1</b>Corte</button>
+      <button type="button" role="tab" class="step" data-step="1"><b>2</b>Diseño</button>
+      <button type="button" role="tab" class="step" data-step="2"><b>3</b>Colores</button>
+      <button type="button" role="tab" class="step" data-step="3"><b>4</b>Nombre</button>
+      <button type="button" role="tab" class="step" data-step="4"><b>5</b>Talla</button>
+    </nav>
+
+    <div class="pane-wrap">
+      <!-- 1. Corte -->
+      <section class="pane is-on" data-pane="0">
+        <h2>Elige el corte</h2>
+        <p class="lead">El modelo 3D cambia al corte que elijas. Ambos son de poliéster interlock con impresión por sublimación.</p>
+        <div class="cuts">
+          <button type="button" class="cut is-on" data-cut="hombre" id="cutH">
+            <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M22 8l-14 8 5 13 6-3v30h26V26l6 3 5-13-14-8c-2 5-6 7-10 7s-8-2-10-7z"/></svg>
+            <span class="cut-name">Hombre</span><span class="cut-sub">Corte regular · XS a 3XL</span>
+          </button>
+          <button type="button" class="cut" data-cut="mujer" id="cutM">
+            <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M23 9l-12 7 4 12 6-3c1 6-2 10-2 14l1 17h28l1-17c0-4-3-8-2-14l6 3 4-12-12-7c-2 4-5 6-9 6s-7-2-9-6z"/></svg>
+            <span class="cut-name">Mujer</span><span class="cut-sub">Entallado · XS a 2XL</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 2. Diseño -->
+      <section class="pane" data-pane="1">
+        <h2>Elige un diseño</h2>
+        <div class="filters" id="filters" role="group" aria-label="Familia de diseño"></div>
+        <div class="designs" id="designs"></div>
+      </section>
+
+      <!-- 3. Colores -->
+      <section class="pane" data-pane="2">
+        <h2>Colores</h2>
+        <div class="zones" id="zones" role="group" aria-label="Zona a pintar"></div>
+        <div class="palette" id="palette"></div>
+        <div class="field">
+          <span class="label">Cuello y puños</span>
+          <div class="seg" id="trims" role="group" aria-label="Color de cuello y puños"></div>
+        </div>
+        <button type="button" class="link" id="resetColors">Volver a los colores de la plantilla</button>
+      </section>
+
+      <!-- 4. Personaliza -->
+      <section class="pane" data-pane="3">
+        <h2>Tu nombre y número</h2>
+        <div class="row2">
+          <label class="field" for="inName">
+            <span class="label">Nombre o gamertag</span>
+            <input id="inName" type="text" maxlength="14" autocomplete="off" spellcheck="false" value="SHADY">
+            <span class="help"><span id="nameCount">5</span>/14 caracteres</span>
+          </label>
+          <label class="field num" for="inNum">
+            <span class="label">Número</span>
+            <input id="inNum" type="text" inputmode="numeric" maxlength="2" value="23">
+            <span class="help">0 a 99</span>
+          </label>
+        </div>
+        <div class="field">
+          <span class="label">Fuente</span>
+          <div class="fonts" id="fonts" role="group" aria-label="Fuente"></div>
+        </div>
+        <div class="field">
+          <span class="label">Color del texto</span>
+          <div class="palette small" id="textPalette"></div>
+        </div>
+        <label class="toggle" for="inOutline"><input id="inOutline" type="checkbox" checked> <span>Contorno en nombre y número</span></label>
+        <div class="row2">
+          <label class="field" for="inTag">
+            <span class="label">Etiqueta en manga</span>
+            <input id="inTag" type="text" maxlength="3" autocomplete="off" value="MX">
+            <span class="help">Hasta 3 letras, p. ej. MX</span>
+          </label>
+          <div class="field">
+            <span class="label">Logo en el pecho</span>
+            <label class="upload" for="inLogo" id="uploadLbl"><input id="inLogo" type="file" accept="image/png,image/jpeg,image/svg+xml,image/webp"><span id="logoTxt">Subir PNG o SVG</span></label>
+            <button type="button" class="link" id="logoClear" hidden>Quitar logo</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Talla -->
+      <section class="pane" data-pane="4">
+        <h2>Talla <span class="muted" id="sizeCut">· Hombre</span></h2>
+        <div class="sizes" id="sizes" role="group" aria-label="Talla"></div>
+        <div class="guide-wrap">
+          <table class="guide" id="guide">
+            <thead><tr><th>Talla</th><th>Ancho de pecho</th><th>Largo</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="help">Medidas del jersey en cm, prenda extendida. Referencia de ejemplo.</p>
+        <div class="field qty">
+          <span class="label">Piezas</span>
+          <div class="stepper"><button type="button" id="qMinus" aria-label="Menos">−</button><output id="qty">1</output><button type="button" id="qPlus" aria-label="Más">+</button></div>
+        </div>
+      </section>
+    </div>
+
+    <footer class="buy">
+      <div class="sum">
+        <div class="sum-line" id="sumLine">Neon Rush · Hombre · Sin talla</div>
+        <div class="price"><span id="price">$1,199</span> <small>MXN</small></div>
+      </div>
+      <div class="buy-actions">
+        <button type="button" class="ghost" id="btnPrint">Archivo de impresión</button>
+        <button type="button" class="cta" id="btnNext">Siguiente</button>
+      </div>
+    </footer>
+  </aside>
+</div>
+
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-card">
+    <button type="button" class="modal-x" id="modalX" aria-label="Cerrar">×</button>
+    <h2 id="modalTitle"></h2>
+    <div id="modalBody"></div>
+  </div>
+</div>
